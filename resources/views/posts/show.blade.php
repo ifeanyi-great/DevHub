@@ -54,8 +54,8 @@
 
                 <button type="button" class="cancel-comment-edit">Cancel</button>
 
-          </form> 
-
+                <p class="edit-error"></p>
+            </form> 
        @endcan
      
        </div>
@@ -291,6 +291,10 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
             cancelButton.textContent = 'Cancel';
             editForm.appendChild(cancelButton);
 
+            const editError = document.createElement('p');
+            editError.classList.add('edit-error');
+            editForm.appendChild(editError);
+
             // Create the dynamic delete button and append it to the newComment
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'delete';
@@ -356,6 +360,8 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
 
         if (event.target.dataset.commentId) {
             const editForm = event.target;
+            const editError = editForm.querySelector('.edit-error');
+            editError.textContent = '';
             const commentContainer = editForm.parentElement;
             const commentBody = commentContainer.querySelector('.comment-body');
             const commentDisplay = commentContainer.querySelector('p');
@@ -372,7 +378,7 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
                 body: formData,
             });
              if(!response.ok){
-                alert('failed to update comment.');
+                editError.textContent = "Failed to update comment. ";
                 return;
              }
             const data = await response.json();
@@ -382,8 +388,6 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
 
     }
 });
-
-//practicing git
 
 </script>
 
