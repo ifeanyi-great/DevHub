@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $post->title }}</title>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 <body>
 
@@ -44,17 +47,26 @@
 
        <div class="comment-error" ></div> 
       @can('update', $comment)
-           <form method="POST" data-comment-id="{{ $comment->id }}" action="{{ route('comments.update', ['post' => $post->id, 'comment' => $comment->id ]) }}">
+           <form method="POST" data-comment-id="{{ $comment->id }}" action="{{ route('comments.update', ['post' => $post->id, 'comment' => $comment->id ]) }}"
+            class="space-y-2 rounded-lg border p-4 max-w-lg"
+            >
                 @csrf
                 @method('PUT')
       
-                <textarea name="body" class="textarea" >{{  $comment->body }}</textarea>
+                <textarea name="body" class="textarea w-full rounded-md border 
+                focus:ring-2" >
 
-                <button type="submit" class="done-button">Done</button>
+                {{  $comment->body }}</textarea>
 
-                <button type="button" class="cancel-comment-edit">Cancel</button>
+                <button type="submit" class="done-button px-4 py-2 rounded-md border bg-blue-600 text-white hover:bg-blue-700 font-medium transition cursor-pointer">
+                    Done
+                </button>
 
-                <p class="edit-error"></p>
+            <button type="button" class="cancel-comment-edit bg-gray-600 rounded-md border px-4 py-2 font-medium text-white font-meduim hover:bg-gray-700 transition cursor-pointer">
+                Cancel
+            </button>
+
+                <p class="edit-error text-red-600 text-sm"></p>
             </form> 
        @endcan
      
@@ -120,7 +132,7 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
         })
 
         editForm.addEventListener('submit', function (event) {
-            event.preventDefault();
+             event.preventDefault();
 
             const formData = new FormData(editForm);
 
@@ -138,12 +150,14 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
             console.log('status:', response.status);
         
             const data = await response.json();
+
           if (!response.ok) {
-           
             console.log('ERROR RESPONSE:', data);
               return;
           }
+
         return data;
+
          })
            .then(data => commentText.textContent = data.body);
 
@@ -249,10 +263,12 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
             editButton.textContent = 'edit';
             newComment.appendChild(editButton);
             editButton.dataset.commentId = data.id;
-            editButton.classList.add('edit-comment');
+            editButton.classList.add('edit-comment', 'cursor-pointer');
 
             //create the dynamic edit form and append it to the newComment
-          const editForm = document.createElement('form');  
+          const editForm = document.createElement('form');
+          editForm.classList.add('space-y-2', 'border', 'rounded-lg', 'p-4', 'max-w-lg')
+
           editForm.action = `/posts/${postId}/comments/${data.id}`;
           editForm.dataset.commentId = data.id; 
 
@@ -267,7 +283,7 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
     
           const textarea = document.createElement('textarea');
           textarea.name = 'body';
-          textarea.classList.add('textarea');  
+          textarea.classList.add('textarea', 'w-full', 'rounded-md', 'border', 'focus:ring-2' );  
           textarea.value = data.body;
           editForm.appendChild(textarea);
           newComment.appendChild(editForm);
@@ -276,7 +292,7 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
           // Add the done  button to the edit form
             const doneButton = document.createElement('button');
             doneButton.type = 'submit';
-            doneButton.classList.add('done-button');
+            doneButton.classList.add('done-button', 'px-4', 'py-2', 'rounded-md', 'border', 'bg-blue-600', 'text-white', 'hover:bg-blue-700', 'font-medium', 'transition', 'cursor-pointe');
             doneButton.textContent = 'Done';
             editForm.appendChild(doneButton);
             
@@ -287,12 +303,12 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
          // Add the cancel button to the edit form
             const cancelButton = document.createElement('button');
            cancelButton.type = 'button';
-            cancelButton.classList.add('cancel-comment-edit');
+            cancelButton.classList.add('cancel-comment-edit', 'px-4', 'py-2', 'rounded-md', 'border', 'bg-gray-600', 'text-white', 'hover:bg-gray-700', 'font-medium', 'transition', 'cursor-pointe');
             cancelButton.textContent = 'Cancel';
             editForm.appendChild(cancelButton);
 
             const editError = document.createElement('p');
-            editError.classList.add('edit-error');
+            editError.classList.add('edit-error', 'text-red-600', 'text-sm', 'mt-4');
             editForm.appendChild(editError);
 
             // Create the dynamic delete button and append it to the newComment
