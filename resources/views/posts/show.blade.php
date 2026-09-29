@@ -48,24 +48,26 @@
        <div class="comment-error" ></div> 
       @can('update', $comment)
            <form method="POST" data-comment-id="{{ $comment->id }}" action="{{ route('comments.update', ['post' => $post->id, 'comment' => $comment->id ]) }}"
-            class="space-y-2 rounded-lg border p-4 max-w-lg"
+            class="space-y-2 rounded-lg  p-4 max-w-lg shadow-sm"
             >
                 @csrf
                 @method('PUT')
-      
-                <textarea name="body" class="textarea w-full rounded-md border 
-                focus:ring-2" >
 
+                
+                <textarea name="body"
+                 class="textarea w-full rounded-md focus:outline-none focus:ring-0 resize-none overflow-hidden" >
                 {{  $comment->body }}</textarea>
-
+                
+                <div class="flex items-center justify-end gap-2">
                 <button type="submit" class="done-button px-4 py-2 rounded-md border bg-blue-600 text-white hover:bg-blue-700 font-medium transition cursor-pointer">
                     Done
                 </button>
 
-            <button type="button" class="cancel-comment-edit bg-gray-600 rounded-md border px-4 py-2 font-medium text-white font-meduim hover:bg-gray-700 transition cursor-pointer">
+            <button type="button" class="cancel-comment-edit  bg-gray-600 rounded-md border px-4 py-2 font-medium text-white font-meduim hover:bg-gray-700 transition cursor-pointer">
                 Cancel
             </button>
-
+            
+        </div>
                 <p class="edit-error text-red-600 text-sm"></p>
             </form> 
        @endcan
@@ -73,13 +75,17 @@
        </div>
 @endforeach
 
-<form method="POST" action="/posts/{{ $post->id }}/comments" class="create-comment-form">
+<form method="POST" action="/posts/{{ $post->id }}/comments" 
+    class="create-comment-form max-w-lg shadow-md m-2 rounded-lg p-2">
+
+    <div class="relative">
     @csrf
+    <textarea name="body" class="w-full focus:outline-none resize-none pr-3 pb-4 min-h-20" placeholder="add comment"></textarea>
 
-    <textarea name="body" ></textarea>
-
-    <button type="submit">Add comment</button>
+    <button type="submit" class=" absolute bottom-2 right-2 cursor-pointer p-2 bg-blue-600 hover:bg-blue-700 transition text-white rounded-full text-xl w-10 h-10 flex items-center justify-center">↑</button>
+</div>
 </form>
+
  @error('body')
  {{ $message }}
  @enderror
@@ -222,6 +228,12 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
     const commentsList = document.querySelector('.comments-list');
     const url = createCommentForm.action;
     const postId = url.split('/')[4];
+  
+    const textarea = document.querySelector('.create-comment-form textarea');
+    textarea.addEventListener('input', ()=> {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px'
+    });
 
     createCommentForm.addEventListener('submit', async function(event){
         event.preventDefault();
@@ -267,7 +279,7 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
 
             //create the dynamic edit form and append it to the newComment
           const editForm = document.createElement('form');
-          editForm.classList.add('space-y-2', 'border', 'rounded-lg', 'p-4', 'max-w-lg')
+          editForm.classList.add('space-y-2', 'shadow-md', 'rounded-lg', 'p-4', 'max-w-lg')
 
           editForm.action = `/posts/${postId}/comments/${data.id}`;
           editForm.dataset.commentId = data.id; 
@@ -283,29 +295,39 @@ document.querySelectorAll('.edit-comment').forEach(function(button){
     
           const textarea = document.createElement('textarea');
           textarea.name = 'body';
-          textarea.classList.add('textarea', 'w-full', 'rounded-md', 'border', 'focus:ring-2' );  
+          textarea.classList.add('textarea', 'w-full', 'rounded-md', 'resize-none', 'focus:ring-0', 'focus:outline-none', 'overflow-hidden');  
           textarea.value = data.body;
           editForm.appendChild(textarea);
           newComment.appendChild(editForm);
           editForm.hidden = true;
 
+
+
           // Add the done  button to the edit form
             const doneButton = document.createElement('button');
             doneButton.type = 'submit';
-            doneButton.classList.add('done-button', 'px-4', 'py-2', 'rounded-md', 'border', 'bg-blue-600', 'text-white', 'hover:bg-blue-700', 'font-medium', 'transition', 'cursor-pointe');
+            doneButton.classList.add('done-button', 'px-4', 'py-2', 'rounded-md', 'border', 'bg-blue-600', 'text-white', 'hover:bg-blue-700', 'font-medium', 'transition', 'cursor-pointer');
             doneButton.textContent = 'Done';
             editForm.appendChild(doneButton);
             
             textarea.addEventListener('input', function(){
                 doneButton.disabled = textarea.value.trim() === '';
+
+                textarea.style.height = 'auto';
+                textarea.style.height = textarea.scrollHeight + 'px';
             });
 
          // Add the cancel button to the edit form
             const cancelButton = document.createElement('button');
            cancelButton.type = 'button';
-            cancelButton.classList.add('cancel-comment-edit', 'px-4', 'py-2', 'rounded-md', 'border', 'bg-gray-600', 'text-white', 'hover:bg-gray-700', 'font-medium', 'transition', 'cursor-pointe');
+            cancelButton.classList.add('cancel-comment-edit', 'px-4', 'py-2', 'rounded-md', 'border', 'bg-gray-600', 'text-white', 'hover:bg-gray-700', 'font-medium', 'transition', 'cursor-pointer');
             cancelButton.textContent = 'Cancel';
             editForm.appendChild(cancelButton);
+           
+          const div = document.createElement('div');
+          div.classList.add('flex', 'items-center', 'justify-end', 'gap-2');
+          editForm.appendChild(div);
+          div.append(doneButton,cancelButton);
 
             const editError = document.createElement('p');
             editError.classList.add('edit-error', 'text-red-600', 'text-sm', 'mt-4');
