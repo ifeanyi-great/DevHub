@@ -25,22 +25,13 @@ class CommentController extends Controller
 
         $comment->save();
 
+        $html = view('components.comments.comment', ['comment' => $comment, 'post' => $post])->render();
+
         return response()->json([
-            'id' => $comment->id,
-            'body' => $comment->body,
-            'user_name' => $comment->user->name,
+        'html' => $html,
         ]);
     }
-
-    public function edit(Post $post, Comment $comment)
-    {
-     $this->authorize('update', $comment);
  
-     return view('comments.edit', [
-         'post' => $post,
-         'comment' => $comment
-     ]);
-    }
     public function update(Request $request, Post $post, Comment $comment)
    {
      $this->authorize('update', $comment);
@@ -52,8 +43,12 @@ class CommentController extends Controller
            
       $comment->update($validated);        
      
+      $html = view('components.comments.comment', [
+        'comment' => $comment, 'post' => $post
+        ])->render();
+
      return response()->json([
-        'body' => $comment->body ,
+        'html' => $html,
      ]);
 
    } 
