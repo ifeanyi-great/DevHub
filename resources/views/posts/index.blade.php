@@ -1,19 +1,31 @@
-<h1>posts</h1>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
-@foreach ($posts as $post)
-    <article>
-        <h2>{{ $post->title }}</h2>
+<main class="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
-        <p>{{ $post->user->name }}</p>
+        <h1 class="mb-6 text-2xl font-bold text-gray-900">
+          Community Posts Feed
+        </h1>
 
-        <h3>Comments</h3>
+        <div class="space-y-4">
+          @foreach ($posts as $post)
+             <x-posts.post-card :post="$post" />
 
-        @foreach ($post->comments as $comment )
-             <p>
-                {{ $comment->body }}
-                -- {{ $comment->user->name }}
-             </p>
-        @endforeach
-        
-    </article>
-@endforeach
+           @endforeach
+        </div>
+
+     <div class="mt-8 flex flex-col items-center gap-4">
+
+            <p class="text-sm text-gray-500">
+                Showing
+                <span class="font-medium text-gray-900">{{ $posts->firstItem() }}</span>
+                -
+                <span class="font-medium text-gray-900">{{ $posts->lastItem() }}</span>
+                of
+                <span class="font-medium text-gray-900">{{ $posts->total() }}</span>
+                posts
+              </p>
+
+         {{ $posts->onEachSide(2)->links() }}
+ </div>
+
+</main>

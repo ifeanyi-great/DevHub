@@ -19,8 +19,7 @@ class PostController extends Controller
 
    $posts = Post::with([
     'user',
-    'comments.user'
-   ])->get();
+   ])->paginate(5);
 
     
    return view('posts.index', [

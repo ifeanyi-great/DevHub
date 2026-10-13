@@ -10,13 +10,7 @@
 </head>
 <body>
 
- <h2>{{ $post->title }}</h2>
-
-<a href="{{ route('users.show', ['user' => $post->user->id] )}}">
-    <p>By {{ $post->user->name }}</p>
-</a>
-
-<p> {{ $post->description }}</p>
+<x-posts.post-card :post="$post" />
 
 <h2>Comments</h2>
 
