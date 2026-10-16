@@ -1,8 +1,8 @@
  <article class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md duration-200 transition-all">
 
 
-             <h2 class="text-lg font-semibold leading-snug text-gray-900">
-                 <a href="{{ route('posts.show', ['post' => $post->id]) }}">
+             <h2 class="text-lg font-semibold leading-snug text-gray-900 ">
+                 <a href=" {{ route('posts.show', ['post' => $post->id]) }}" class="hover:underline hover:text-blue-600 transition-colors">
                      {{$post->title}}
                  </a>
              </h2>
