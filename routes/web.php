@@ -28,11 +28,19 @@ Route::put('/posts/{post}', [PostController::class,'update'])->middleware('auth'
 
 Route::delete('/posts/{post}', [PostController::class,'destroy'])->middleware('auth');
 
-Route::post('posts/{post}/comments/', [CommentController::class, 'store'])->middleware('auth');
+Route::post('posts/{post}/comments/', [CommentController::class, 'store'])
+   ->middleware('auth')
+   ->scopeBindings();
 
-Route::put('/posts/{post}/comments/{comment}', [CommentController::class,'update'])->name('comments.update')->middleware('auth');
+Route::put('/posts/{post}/comments/{comment}', [CommentController::class,'update'])
+    ->name('comments.update')
+    ->middleware('auth')
+    ->scopeBindings();
 
-Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth')->name('comments.destroy');
+Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('comments.destroy')
+    ->scopeBindings();
 
 Route::get('users/{user}', [UserController::class, 'show'])->name('users.show')->middleware('auth');
 Route::put('users/{user}', [UserController::class, 'update'])->name('users.update')->middleware('auth');

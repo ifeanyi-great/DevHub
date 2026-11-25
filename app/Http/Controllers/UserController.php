@@ -20,17 +20,16 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
- 
-
         $request->validate([
          'profile_picture' => 'image|max:2048',
         ]);
 
-       $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+        if($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->profile_picture = $path;
+            }
 
-       $user->profile_picture = $path;
-
-       $user->save();
+            $user->save();
     }
 
 }

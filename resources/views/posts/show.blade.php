@@ -79,7 +79,7 @@
           if(!button) return;
 
           if(button.classList.contains('edit-comment')){
-                  event.preventDefault();
+              event.preventDefault();
 
                     const commentContainer = event.target.closest('.control-comment');
                     const editForm = commentContainer.querySelector('form[data-comment-id]');
@@ -120,7 +120,7 @@
                         commentContainer.remove();
 
                     }
-                    catch(error){
+                    catch {
                         const deleteError = commentContainer.querySelector('.comment-error');
                         deleteError.textContent = "Network error. Please check your internet connection and try again.";
                         return;

@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+      $middleware->statefulApi(); //enables Sanctum's stateful API middleware, allowing requests from configured first-party frontend origins to use Laravel's session authentication
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

@@ -41,7 +41,7 @@ class CommentController extends Controller
  ]);
       
            
-      $comment->update($validated);        
+      $comment->update($validated);
      
       $html = view('components.comments.comment', [
         'comment' => $comment, 'post' => $post
